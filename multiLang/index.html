@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://unpkg.com/@andreasremdt/simple-translator@latest/dist/umd/translator.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <select id="languageSelect">
+      <option value="vi">Vietnamese</option>
+      <option value="en">English</option>
+    </select>
+    <h1 data-i18n="header.title"></h1>
+    <p data-i18n="header.subtitle"></p>
+
+    <script defer>
+      window.onload = function () {
+        var translator = new Translator({
+          filesLocation: "./i18n",
+        });
+
+        var savedLanguage = localStorage.getItem("selectedLanguage") || "vi";
+        var languageSelect = document.getElementById("languageSelect");
+        languageSelect.value = savedLanguage;
+
+        function updateLanguage(newLanguage) {
+          translator.translatePageTo(newLanguage);
+          localStorage.setItem("selectedLanguage", newLanguage);
+        }
+
+        translator.fetch(["vi", "en"]).then(() => {
+          translator.translatePageTo(savedLanguage);
+        });
+
+        languageSelect.addEventListener("change", function () {
+          updateLanguage(languageSelect.value);
+        });
+      };
+    </script>
+  </body>
+</html>
